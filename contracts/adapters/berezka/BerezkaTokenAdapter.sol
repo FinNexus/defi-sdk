@@ -23,15 +23,10 @@ import { ProtocolAdapter } from "../ProtocolAdapter.sol";
 
 
 interface IBerezkaTokenAdapterGovernance {
-    
     function listTokens() external view returns (address[] memory);
-
     function listProtocols() external view returns (address[] memory);
-
     function listEthProtocols() external view returns (address[] memory);
-
     function listProducts() external view returns (address[] memory);
-
     function getVaults(address _token) external view returns (address[] memory);
 }
 
@@ -89,19 +84,15 @@ contract BerezkaTokenAdapter is TokenAdapter {
 
         Component[] memory underlyingTokens = new Component[](1 + length);
 
-        // Handle ETH
-        {
-            Component memory ethComponent = _getEthComponents(vaults, totalSupply);
-            underlyingTokens[0] = ethComponent;
-        }
-        
         // Handle ERC20 assets + debt
         for (uint256 i = 0; i < length; i++) {
-            address asset = assets[i];
-            Component memory tokenComponent =
-                _getTokenComponents(asset, vaults, debtAdapters, totalSupply);
-            underlyingTokens[i + 1] = tokenComponent;
+            underlyingTokens[i] = _getTokenComponents(assets[i], vaults, debtAdapters, totalSupply);
         }
+
+        // Handle ETH
+        underlyingTokens[length] = _getEthComponents(vaults, totalSupply);
+        
+
         
         return underlyingTokens;
     }
