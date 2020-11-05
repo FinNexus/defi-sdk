@@ -5,7 +5,6 @@ const ProtocolAdapter = artifacts.require('FinNexusDebtAdapter');
 const ERC20TokenAdapter = artifacts.require('ERC20TokenAdapter');
 
 contract('FinNexusDebtAdapter', () => {
-  const ethAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
   const usdcAddress = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
   const fnxAddress = '0xeF9Cd7882c067686691B6fF49e650b43AFBBCC6B';
   const testAddress = '0xBA096024056bB653c6E28f53C8889BFC3553bAD8';
@@ -56,7 +55,6 @@ contract('FinNexusDebtAdapter', () => {
       ]],
       [[[
         fnxAddress,
-        ethAddress,
         usdcAddress,
       ]]],
     )
@@ -80,7 +78,6 @@ contract('FinNexusDebtAdapter', () => {
       .then((result) => {
         displayToken(result[0].adapterBalances[0].balances[0].base);
         displayToken(result[0].adapterBalances[0].balances[1].base);
-        displayToken(result[0].adapterBalances[0].balances[2].base);
       });
   });
 });

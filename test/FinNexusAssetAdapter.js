@@ -6,7 +6,9 @@ const ERC20TokenAdapter = artifacts.require('ERC20TokenAdapter');
 
 contract('FinNexusDebtAdapter', () => {
 
-  const fptAddress = '0xA072EA1a2a75047908e68e0B1a2baC3a7190CE58';
+  const fptFnxAddress = '0x7e605fb638983a448096d82ffd2958ba012f30cd';
+  const fptUsdcAddress = '0x16305b9ec0bdbe32cf8a0b5c142ceb3682db9d2d';
+
   const testAddress = '0xBA096024056bB653c6E28f53C8889BFC3553bAD8';
 
   let accounts;
@@ -15,9 +17,9 @@ contract('FinNexusDebtAdapter', () => {
   let erc20TokenAdapterAddress;
 
   const fpt = [
-    fptAddress,
+      fptFnxAddress,
     'FinNexus coin',
-    'FNX',
+    'FPT',
     '18',
   ];
 
@@ -49,7 +51,8 @@ contract('FinNexusDebtAdapter', () => {
         protocolAdapterAddress,
       ]],
       [[[
-          fptAddress,
+          fptFnxAddress,
+          fptUsdcAddress
       ]]],
     )
       .send({
