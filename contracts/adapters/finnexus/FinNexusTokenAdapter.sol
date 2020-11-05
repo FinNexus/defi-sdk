@@ -46,14 +46,15 @@ interface FNXOracle {
  */
 contract FinNexusTokenAdapter is TokenAdapter {
 
-    address public constant OPT_MANAGER = 0xfa30ec96De9840A611FcB64e7312f97bdE6e155A;
-    address public constant ORACLE = 0x940b491905529542Ba3b56244A06B1EBE11e71F2;
+    address public constant OPT_MANAGER_FNX = 0xfDf252995da6D6c54C03FC993e7AA6B593A57B8d;
+    address public constant OPT_MANAGER_USDC = 0x120f18F5B8EdCaA3c083F9464c57C11D81a9E549;
+    
+    address public constant ORACLE = 0x43BD92bF3Bb25EBB3BdC2524CBd6156E3Fdd41F3;
 
-    address[] internal underlyingAddress =[
-        0x0000000000000000000000000000000000000000,
-        0xeF9Cd7882c067686691B6fF49e650b43AFBBCC6B,
-        0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
-    ];
+
+    address public constant FNX = 0xeF9Cd7882c067686691B6fF49e650b43AFBBCC6B;
+    address public constant USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+
     /**
      * @return TokenMetadata struct with ERC20-style token info.
      * @dev Implementation of TokenAdapter interface function.
@@ -73,22 +74,26 @@ contract FinNexusTokenAdapter is TokenAdapter {
      */
     function getComponents(address) external view override returns (Component[] memory) {
         
-        Component[] memory underlyingTokens = new Component[](underlyingAddress.length);
+        Component[] memory underlyingTokens = new Component[](2);
 
-        uint256 fptWorth = OptionsManagerV2(OPT_MANAGER).getTokenNetworth();
-        uint256 tokenPrice;
-        for (uint256 i = 0; i < underlyingTokens.length; i++) {
-           tokenPrice = FNXOracle(ORACLE).getPrice(underlyingAddress[i]);
-            
-            tokenPrice = (i == 2) ? tokenPrice * 1e6 : tokenPrice * 1e18;
-            
-            underlyingTokens[i] = Component({
-                token: i == 0 ? 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE : underlyingAddress[i],
+        uint256 fptWorth = OptionsManagerV2(OPT_MANAGER_USDC).getTokenNetworth();
+        uint256 tokenPrice = FNXOracle(ORACLE).getPrice(USDC);
+        tokenPrice = tokenPrice * 1e6 ;
+        underlyingTokens[0] = Component({
+                token:USDC,
                 tokenType: "ERC20",
                 rate: tokenPrice / fptWorth
-            });
-        }
-
+                });
+                
+        fptWorth = OptionsManagerV2(OPT_MANAGER_FNX).getTokenNetworth();
+        tokenPrice = FNXOracle(ORACLE).getPrice(FNX);    
+        tokenPrice =  tokenPrice * 1e18;
+        underlyingTokens[1] = Component({
+                token:FNX,
+                tokenType: "ERC20",
+                rate: tokenPrice / fptWorth
+                });
+                
         return underlyingTokens;
     }
 }

@@ -32,13 +32,16 @@ contract FinNexusAssetAdapter is ProtocolAdapter {
     string public constant override adapterType = "Asset";
     string public constant override tokenType = "FPT token";
 
-    address public constant fptaddress = 0xA072EA1a2a75047908e68e0B1a2baC3a7190CE58;
+    address public constant FPT_FNX = 0x7E605Fb638983A448096D82fFD2958ba012F30Cd;
+    address public constant FPT_USDC = 0x16305b9EC0bdBE32cF8a0b5C142cEb3682dB9d2d;
     
     /**
      * @return Amount of FPT token on FNX the Option protocol by the given account.
      * @dev Implementation of ProtocolAdapter interface function.
      */
     function getBalance(address, address account) external view override returns (uint256) {
-        return FPTCoin(fptaddress).balanceOf(account) +  FPTCoin(fptaddress).lockedBalanceOf(account);
+        uint256 fptFnx = FPTCoin(FPT_FNX).balanceOf(account) +  FPTCoin(FPT_FNX).lockedBalanceOf(account);
+        uint256 fptUsdc= FPTCoin(FPT_USDC).balanceOf(account) +  FPTCoin(FPT_USDC).lockedBalanceOf(account);
+        return fptFnx + fptUsdc;
     }
 }
