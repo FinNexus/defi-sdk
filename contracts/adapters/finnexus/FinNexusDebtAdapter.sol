@@ -48,13 +48,12 @@ contract FinNexusDebtAdapter is ProtocolAdapter {
      * @dev Implementation of ProtocolAdapter interface function.
      */
     function getBalance(address token, address account) external view override returns (uint256) {
-        
         if (token == FNX ) {
             return  FinNexusCollecteralPool(COLLATERAL_POOL_FNX).getUserInputCollateral(account,token);
         }
         
         if( token == USDC) {
-            return FinNexusCollecteralPool(COLLATERAL_POOL_FNX).getUserInputCollateral(account,token);
+            return FinNexusCollecteralPool(COLLATERAL_POOL_USDC).getUserInputCollateral(account,token);
         }
         
         return 0;
