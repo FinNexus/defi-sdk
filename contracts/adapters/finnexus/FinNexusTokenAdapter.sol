@@ -55,6 +55,8 @@ contract FinNexusTokenAdapter is TokenAdapter {
     address public constant FNX = 0xeF9Cd7882c067686691B6fF49e650b43AFBBCC6B;
     address public constant USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
 
+    address public constant FPT_FNX = 0x7E605Fb638983A448096D82fFD2958ba012F30Cd;
+    address public constant FPT_USDC = 0x16305b9EC0bdBE32cF8a0b5C142cEb3682dB9d2d;
     /**
      * @return TokenMetadata struct with ERC20-style token info.
      * @dev Implementation of TokenAdapter interface function.
@@ -80,7 +82,7 @@ contract FinNexusTokenAdapter is TokenAdapter {
         uint256 tokenPrice = FNXOracle(ORACLE).getPrice(USDC);
         tokenPrice = tokenPrice * 1e6 ;
         underlyingTokens[0] = Component({
-                token:USDC,
+                token:FPT_USDC,
                 tokenType: "ERC20",
                 rate: tokenPrice / fptWorth
                 });
@@ -89,7 +91,7 @@ contract FinNexusTokenAdapter is TokenAdapter {
         tokenPrice = FNXOracle(ORACLE).getPrice(FNX);    
         tokenPrice =  tokenPrice * 1e18;
         underlyingTokens[1] = Component({
-                token:FNX,
+                token:FPT_FNX,
                 tokenType: "ERC20",
                 rate: tokenPrice / fptWorth
                 });
