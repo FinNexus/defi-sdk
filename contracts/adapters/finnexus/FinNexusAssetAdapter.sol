@@ -39,9 +39,14 @@ contract FinNexusAssetAdapter is ProtocolAdapter {
      * @return Amount of FPT token on FNX the Option protocol by the given account.
      * @dev Implementation of ProtocolAdapter interface function.
      */
-    function getBalance(address, address account) external view override returns (uint256) {
-        uint256 fptFnx = FPTCoin(FPT_FNX).balanceOf(account) +  FPTCoin(FPT_FNX).lockedBalanceOf(account);
-        uint256 fptUsdc= FPTCoin(FPT_USDC).balanceOf(account) +  FPTCoin(FPT_USDC).lockedBalanceOf(account);
-        return fptFnx + fptUsdc;
+    function getBalance(address token, address account) external view override returns (uint256) {
+        
+        if (token==FPT_FNX)
+            return FPTCoin(FPT_FNX).balanceOf(account) +  FPTCoin(FPT_FNX).lockedBalanceOf(account);
+        else if (token==FPT_USDC) 
+            return FPTCoin(FPT_USDC).balanceOf(account) +  FPTCoin(FPT_USDC).lockedBalanceOf(account);
+            
+        return 0;
+        
     }
 }
