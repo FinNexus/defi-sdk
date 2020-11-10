@@ -74,28 +74,34 @@ contract FinNexusTokenAdapter is TokenAdapter {
      * @return Array of Component structs with underlying tokens rates for the given token.
      * @dev Implementation of TokenAdapter interface function.
      */
-    function getComponents(address) external view override returns (Component[] memory) {
+    function getComponents(address token) external view override returns (Component[] memory) {
         
-        Component[] memory underlyingTokens = new Component[](2);
+        Component[] memory underlyingTokens = new Component[](1);
 
-        uint256 fptWorth = OptionsManagerV2(OPT_MANAGER_USDC).getTokenNetworth();
-        uint256 tokenPrice = FNXOracle(ORACLE).getPrice(USDC);
-        tokenPrice = tokenPrice * 1e6 ;
-        underlyingTokens[0] = Component({
-                token:FPT_USDC,
-                tokenType: "ERC20",
-                rate: tokenPrice / fptWorth
-                });
+        if (token == FPT_USDC) {
+            
+            uint256 fptWorth = OptionsManagerV2(OPT_MANAGER_USDC).getTokenNetworth();
+            uint256 tokenPrice = FNXOracle(ORACLE).getPrice(USDC);
+            tokenPrice = tokenPrice * 1e6 ;
+            underlyingTokens[0] = Component({
+                    token:USDC,
+                    tokenType: "ERC20",
+                    rate: tokenPrice / fptWorth
+                    });
+                    
+        } else if (token == FPT_FNX) {
                 
-        fptWorth = OptionsManagerV2(OPT_MANAGER_FNX).getTokenNetworth();
-        tokenPrice = FNXOracle(ORACLE).getPrice(FNX);    
-        tokenPrice =  tokenPrice * 1e18;
-        underlyingTokens[1] = Component({
-                token:FPT_FNX,
-                tokenType: "ERC20",
-                rate: tokenPrice / fptWorth
-                });
+            uint256 fptWorth = OptionsManagerV2(OPT_MANAGER_FNX).getTokenNetworth();
+            uint256 tokenPrice = FNXOracle(ORACLE).getPrice(FNX);    
+            tokenPrice =  tokenPrice * 1e18;
+            underlyingTokens[0] = Component({
+                    token:FNX,
+                    tokenType: "ERC20",
+                    rate: tokenPrice / fptWorth
+                    });
+        }
                 
         return underlyingTokens;
+    
     }
 }
